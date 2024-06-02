@@ -2,13 +2,15 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import 'react-toastify/dist/ReactToastify.css'
 import { Navigate, Route, Routes } from "react-router-dom";
-import { getContacts, saveContact, updatePhoto } from "./api/contactService";
+import { getAuthTOken, getContacts, saveContact, updatePhoto } from "./api/contactService";
 import Header from "./components/Header";
 import ContactList from "./components/ContactList";
 import { useRef } from "react";
 import ContactDetail from "./components/ContactDetail";
 import { toastError, toastSuccess } from "./api/toastService";
 import { ToastContainer } from "react-toastify";
+import { LoginForm } from "./components/LoginForm";
+import { RegisterForm } from "./components/RegisterForm";
 
 function App() {
   const modalRef = useRef();
@@ -31,7 +33,7 @@ function App() {
     console.log(values)
   };
 
-  const getAllContacts = async (page = 0, size = 10) => {
+  const getAllContacts = async (page = 0, size = 12) => {
     try {
       setcurrentPage(page);
       const { data } = await getContacts(page, size);
@@ -93,7 +95,9 @@ function App() {
   };
 
   useEffect(() => {
-    getAllContacts();
+    if(getAuthTOken() != null){
+      getAllContacts();
+    }
   }, []);
 
   return (
@@ -122,6 +126,8 @@ function App() {
                 />
               }
             />
+            <Route path="/login" element = {<LoginForm/>} />
+            <Route path="/register" element = {<RegisterForm/>} />
           </Routes>
         </div>
       </main>

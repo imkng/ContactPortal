@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getContact, updatePhoto } from "../api/contactService";
-import { toastError, toastSuccess } from "../api/toastService";
+import { toastError, toastInfo, toastSuccess } from "../api/toastService";
 
 function ContactDetail({ updateContact, updateImage }) {
+  const navigate = useNavigate();
   const inputRef = useRef();
   const [contact, setContact] = useState({
     id: '',
@@ -53,7 +54,7 @@ function ContactDetail({ updateContact, updateImage }) {
   const onUpdateContact = async(event) => {
     event.preventDefault();
     await updateContact(contact);
-    console.log(values);
+    // console.log(values);
     getContactById(id);
     toastSuccess("Contact Updated!!");
   };
@@ -116,7 +117,15 @@ function ContactDetail({ updateContact, updateImage }) {
                                 </div>
                             </div>
                             <div className="form_footer">
-                                <button type="submit" className="btn">Save</button>
+                                <button type="submit" className="btn mr-2">Save</button>
+                                <button type="button" onClick={()=> {
+                                  navigate("/")
+                                  toastInfo("Work In Progress")
+                                }} className="mt-4 mb-4 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 
+                                focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
+                                ">
+                                  Delete
+                                </button>
                             </div>
                         </form>
                     </div>
